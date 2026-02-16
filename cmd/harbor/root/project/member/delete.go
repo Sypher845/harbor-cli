@@ -46,7 +46,7 @@ func DeleteMemberCommand() *cobra.Command {
 					if utils.ParseHarborErrorCode(checkErr) == "404" {
 						return fmt.Errorf("project %s does not exist", args[0])
 					}
-					return fmt.Errorf("failed to verify project: %v", checkErr)
+					return fmt.Errorf("failed to verify project: %v", utils.ParseHarborErrorMsg(checkErr))
 				}
 				project = args[0]
 			} else {
