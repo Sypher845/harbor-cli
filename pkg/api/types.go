@@ -94,6 +94,7 @@ type ListVulnerabilityOptions struct {
 	Exclude     string
 	WithTag     bool
 	Fixable     bool
+	All         bool
 	Page        int64
 	PageSize    int64
 	Q           string
