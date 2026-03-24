@@ -97,5 +97,4 @@ type ListVulnerabilityOptions struct {
 	All         bool
 	Page        int64
 	PageSize    int64
-	Q           string
 }
