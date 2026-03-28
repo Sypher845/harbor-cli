@@ -88,8 +88,8 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				i, ok := m.List.SelectedItem().(Item)
 				if ok {
 					m.Choice = string(i)
+					return m, tea.Quit
 				}
-				return m, tea.Quit
 			}
 		}
 	}
