@@ -15,6 +15,7 @@ package api
 
 import (
 	"fmt"
+	"strconv"
 	"strings"
 
 	"github.com/goharbor/go-client/pkg/sdk/v2.0/client/preheat"
@@ -55,7 +56,7 @@ func DeleteInstance(instanceName string) error {
 	return nil
 }
 
-func ListInstance(opts ...ListFlags) (*preheat.ListInstancesOK, error) {
+func ListAllInstance(opts ...ListFlags) (*preheat.ListInstancesOK, error) {
 	ctx, client, err := utils.ContextWithClient()
 	if err != nil {
 		return nil, err
@@ -82,7 +83,7 @@ func ListInstance(opts ...ListFlags) (*preheat.ListInstancesOK, error) {
 }
 
 func GetInstanceNameByID(id int64) (string, error) {
-	instances, err := ListInstance()
+	instances, err := ListAllInstance()
 	if err != nil {
 		return "", err
 	}
@@ -94,4 +95,30 @@ func GetInstanceNameByID(id int64) (string, error) {
 	}
 
 	return "", fmt.Errorf("no instance found with ID: %v", id)
+}
+
+func GetInstance(instanceNameOrID string, useInstanceID bool) (*preheat.GetInstanceOK, error) {
+	ctx, client, err := utils.ContextWithClient()
+	if err != nil {
+		return nil, err
+	}
+	if useInstanceID {
+		instanceID, err := strconv.ParseInt(instanceNameOrID, 10, 64)
+		if err != nil {
+			return nil, err
+		}
+		instanceNameOrID, err = GetInstanceNameByID(instanceID)
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	response, err := client.Preheat.GetInstance(ctx, &preheat.GetInstanceParams{
+		PreheatInstanceName: instanceNameOrID,
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	return response, nil
 }
