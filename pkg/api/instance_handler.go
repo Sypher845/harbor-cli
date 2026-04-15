@@ -56,6 +56,26 @@ func DeleteInstance(instanceName string) error {
 	return nil
 }
 
+func UpdateInstance(instanceName string, instance models.Instance) error {
+	ctx, client, err := utils.ContextWithClient()
+	if err != nil {
+		return err
+	}
+
+	instance.Endpoint = strings.TrimSpace(instance.Endpoint)
+
+	_, err = client.Preheat.UpdateInstance(ctx, &preheat.UpdateInstanceParams{
+		PreheatInstanceName: instanceName,
+		Instance:            &instance,
+	})
+	if err != nil {
+		return err
+	}
+
+	log.Infof("Instance %s updated", instance.Name)
+	return nil
+}
+
 func ListAllInstance(opts ...ListFlags) (*preheat.ListInstancesOK, error) {
 	ctx, client, err := utils.ContextWithClient()
 	if err != nil {
