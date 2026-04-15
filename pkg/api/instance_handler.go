@@ -76,6 +76,30 @@ func UpdateInstance(instanceName string, instance models.Instance) error {
 	return nil
 }
 
+func PingInstance(instanceNameOrID string, useInstanceID bool) (*preheat.PingInstancesOK, error) {
+	ctx, client, err := utils.ContextWithClient()
+	if err != nil {
+		return nil, err
+	}
+
+	instance, err := GetInstance(instanceNameOrID, useInstanceID)
+	if err != nil {
+		return nil, err
+	}
+	if instance == nil || instance.Payload == nil {
+		return nil, fmt.Errorf("failed to ping instance: empty response")
+	}
+
+	response, err := client.Preheat.PingInstances(ctx, &preheat.PingInstancesParams{
+		Instance: instance.Payload,
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	return response, nil
+}
+
 func ListAllInstance(opts ...ListFlags) (*preheat.ListInstancesOK, error) {
 	ctx, client, err := utils.ContextWithClient()
 	if err != nil {
