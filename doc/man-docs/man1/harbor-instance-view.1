@@ -10,7 +10,9 @@ harbor-instance-view - get preheat provider instance by name or id
 
 
 .SH DESCRIPTION
-get preheat provider instance by name or id
+Get detailed information about a preheat provider instance in Harbor. You can specify the instance
+by name or ID directly as an argument. If no argument is provided, you will be prompted to select
+an instance from a list of available instances.
 
 
 .SH OPTIONS
@@ -33,6 +35,13 @@ get preheat provider instance by name or id
 .PP
 \fB-v\fP, \fB--verbose\fP[=false]
 	verbose output
+
+
+.SH EXAMPLE
+.EX
+  harbor-cli instance view my-instance
+  harbor-cli instance view 1 --id
+.EE
 
 
 .SH SEE ALSO

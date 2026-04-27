@@ -30,7 +30,12 @@ func PingInstanceCommand() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "ping [NAME|ID]",
 		Short: "Ping preheat provider instance by name or id",
-		Args:  cobra.MaximumNArgs(1),
+		Long: `Ping a preheat provider instance to test its connectivity in Harbor. You can specify the instance
+by name or ID directly as an argument. If no argument is provided, you will be prompted to select
+an instance from a list of available instances.`,
+		Example: `  harbor-cli instance ping my-instance
+  harbor-cli instance ping 1 --id`,
+		Args: cobra.MaximumNArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			var err error
 			var instanceName string

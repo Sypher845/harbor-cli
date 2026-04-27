@@ -8,8 +8,21 @@ weight: 40
 
 ##### get preheat provider instance by name or id
 
+### Synopsis
+
+Get detailed information about a preheat provider instance in Harbor. You can specify the instance
+by name or ID directly as an argument. If no argument is provided, you will be prompted to select
+an instance from a list of available instances.
+
 ```sh
 harbor instance view [NAME|ID] [flags]
+```
+
+### Examples
+
+```sh
+  harbor-cli instance view my-instance
+  harbor-cli instance view 1 --id
 ```
 
 ### Options

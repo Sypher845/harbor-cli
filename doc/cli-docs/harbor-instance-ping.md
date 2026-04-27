@@ -8,8 +8,21 @@ weight: 25
 
 ##### Ping preheat provider instance by name or id
 
+### Synopsis
+
+Ping a preheat provider instance to test its connectivity in Harbor. You can specify the instance
+by name or ID directly as an argument. If no argument is provided, you will be prompted to select
+an instance from a list of available instances.
+
 ```sh
 harbor instance ping [NAME|ID] [flags]
+```
+
+### Examples
+
+```sh
+  harbor-cli instance ping my-instance
+  harbor-cli instance ping 1 --id
 ```
 
 ### Options
