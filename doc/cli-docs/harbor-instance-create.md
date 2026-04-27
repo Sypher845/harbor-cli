@@ -21,7 +21,7 @@ harbor instance create [flags]
 ### Examples
 
 ```sh
-  harbor-cli instance create --name my-instance --provider Dragonfly --url http://dragonfly.local --description "My preheat provider instance" --enable=true
+  harbor-cli instance create --name my-instance --provider dragonfly --url http://dragonfly.local --description "My preheat provider instance" --enable=true
 ```
 
 ### Options
@@ -34,7 +34,7 @@ harbor instance create [flags]
   -d, --description string     Description of the instance
       --enable                 Whether the instance is enabled or not (default true)
   -h, --help                   help for create
-      --insecure               Whether or not the certificate will be verified when Harbor tries to access the server
+  -i, --insecure               Whether or not the certificate will be verified when Harbor tries to access the server
   -n, --name string            Name of the instance
   -p, --provider string        Provider for the instance (e.g. dragonfly, kraken)
   -u, --url string             Endpoint URL for the instance

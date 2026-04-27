@@ -31,11 +31,20 @@ func ViewInstanceCommand() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "view [NAME|ID]",
 		Short: "get preheat provider instance by name or id",
-		Args:  cobra.MaximumNArgs(1),
+		Long: `Get detailed information about a preheat provider instance in Harbor. You can specify the instance
+by name or ID directly as an argument. If no argument is provided, you will be prompted to select
+an instance from a list of available instances.`,
+		Example: `  harbor-cli instance view my-instance
+  harbor-cli instance view 1 --id`,
+		Args: cobra.MaximumNArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			var err error
 			var instanceName string
 			var instance *preheat.GetInstanceOK
+
+			if isID && len(args) == 0 {
+				return fmt.Errorf("instance ID must be provided when using --id")
+			}
 
 			if len(args) > 0 {
 				log.Debugf("Instance name provided: %s", args[0])

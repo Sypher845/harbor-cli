@@ -15,6 +15,7 @@ package instance
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/goharbor/harbor-cli/pkg/api"
 	"github.com/goharbor/harbor-cli/pkg/utils"
@@ -32,7 +33,7 @@ func CreateInstanceCommand() *cobra.Command {
 		Long: `Create a new preheat provider instance within Harbor for distributing container images.
 The instance can be an external service such as Dragonfly, Kraken, or any custom provider.
 You will need to provide the instance's name, vendor, endpoint, and optionally other details such as authentication and security options.`,
-		Example: `  harbor-cli instance create --name my-instance --provider Dragonfly --url http://dragonfly.local --description "My preheat provider instance" --enable=true`,
+		Example: `  harbor-cli instance create --name my-instance --provider dragonfly --url http://dragonfly.local --description "My preheat provider instance" --enable=true`,
 		Args:    cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			var err error
@@ -44,6 +45,8 @@ You will need to provide the instance's name, vendor, endpoint, and optionally o
 					return err
 				}
 				opts.Endpoint = formattedEndpoint
+
+				opts.AuthMode = strings.ToUpper(strings.TrimSpace(opts.AuthMode))
 
 				switch opts.AuthMode {
 				case "BASIC":
@@ -97,7 +100,7 @@ You will need to provide the instance's name, vendor, endpoint, and optionally o
 	flags.StringVarP(&opts.Vendor, "provider", "p", "", "Provider for the instance (e.g. dragonfly, kraken)")
 	flags.StringVarP(&opts.Endpoint, "url", "u", "", "Endpoint URL for the instance")
 	flags.StringVarP(&opts.Description, "description", "d", "", "Description of the instance")
-	flags.BoolVarP(&opts.Insecure, "insecure", "", false, "Whether or not the certificate will be verified when Harbor tries to access the server")
+	flags.BoolVarP(&opts.Insecure, "insecure", "i", false, "Whether or not the certificate will be verified when Harbor tries to access the server")
 	flags.BoolVarP(&opts.Enabled, "enable", "", true, "Whether the instance is enabled or not")
 	flags.StringVarP(&opts.AuthMode, "authmode", "a", "NONE", "Authentication mode (NONE, BASIC, OAUTH)")
 	flags.StringVar(&authUsername, "auth-username", "", "Username for BASIC authentication")

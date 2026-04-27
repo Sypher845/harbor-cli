@@ -67,10 +67,18 @@ flags are provided, the command opens an interactive update form.`,
 				}
 			}
 
-			instance, err := getInstanceForUpdate(instanceName, isID)
+			resp, err := api.GetInstance(instanceName, isID)
 			if err != nil {
-				return err
+				if utils.ParseHarborErrorCode(err) == "404" {
+					return fmt.Errorf("instance %s does not exist", instanceName)
+				}
+				return fmt.Errorf("failed to get instance: %v", utils.ParseHarborErrorMsg(err))
 			}
+			if resp == nil || resp.Payload == nil {
+				return fmt.Errorf("failed to get instance: empty response")
+			}
+
+			instance := resp.Payload
 			originalName := instance.Name
 
 			if hasUpdateFlagChanges(cmd) {
@@ -97,7 +105,7 @@ flags are provided, the command opens an interactive update form.`,
 	flags.StringVarP(&opts.Name, "name", "n", "", "New name for the instance")
 	flags.StringVarP(&opts.Endpoint, "url", "u", "", "Endpoint URL for the instance")
 	flags.StringVarP(&opts.Description, "description", "d", "", "Description of the instance")
-	flags.BoolVarP(&opts.Insecure, "insecure", "", false, "Whether or not the certificate will be verified when Harbor tries to access the server")
+	flags.BoolVarP(&opts.Insecure, "insecure", "i", false, "Whether or not the certificate will be verified when Harbor tries to access the server")
 	flags.BoolVarP(&opts.Enabled, "enable", "", false, "Whether the instance is enabled or not")
 	flags.StringVarP(&opts.AuthMode, "authmode", "a", "", "Authentication mode (NONE, BASIC, OAUTH)")
 	flags.StringVar(&opts.AuthUsername, "auth-username", "", "Username for BASIC authentication")
@@ -105,22 +113,6 @@ flags are provided, the command opens an interactive update form.`,
 	flags.StringVar(&opts.AuthToken, "auth-token", "", "Token for OAUTH authentication")
 
 	return cmd
-}
-
-func getInstanceForUpdate(instanceName string, isID bool) (*models.Instance, error) {
-	instance, err := api.GetInstance(instanceName, isID)
-	if err != nil {
-		if utils.ParseHarborErrorCode(err) == "404" {
-			return nil, fmt.Errorf("instance %s does not exist", instanceName)
-		}
-		return nil, fmt.Errorf("failed to get instance: %v", utils.ParseHarborErrorMsg(err))
-	}
-
-	if instance == nil || instance.Payload == nil {
-		return nil, fmt.Errorf("failed to get instance: empty response")
-	}
-
-	return instance.Payload, nil
 }
 
 func hasUpdateFlagChanges(cmd *cobra.Command) bool {

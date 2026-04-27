@@ -44,7 +44,7 @@ You will need to provide the instance's name, vendor, endpoint, and optionally o
 	help for create
 
 .PP
-\fB--insecure\fP[=false]
+\fB-i\fP, \fB--insecure\fP[=false]
 	Whether or not the certificate will be verified when Harbor tries to access the server
 
 .PP
@@ -75,7 +75,7 @@ You will need to provide the instance's name, vendor, endpoint, and optionally o
 
 .SH EXAMPLE
 .EX
-  harbor-cli instance create --name my-instance --provider Dragonfly --url http://dragonfly.local --description "My preheat provider instance" --enable=true
+  harbor-cli instance create --name my-instance --provider dragonfly --url http://dragonfly.local --description "My preheat provider instance" --enable=true
 .EE
 
 

@@ -128,6 +128,7 @@ func UpdateInstanceView(instance *models.Instance) error {
 		huh.NewGroup(
 			huh.NewInput().
 				Title("Token").
+				EchoMode(huh.EchoModePassword).
 				Value(&authToken).
 				Validate(func(str string) error {
 					if instance.AuthMode != "OAUTH" {

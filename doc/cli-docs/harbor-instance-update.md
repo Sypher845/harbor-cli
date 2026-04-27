@@ -36,7 +36,7 @@ harbor instance update [NAME|ID] [flags]
       --enable                 Whether the instance is enabled or not
   -h, --help                   help for update
       --id                     Get instance by id
-      --insecure               Whether or not the certificate will be verified when Harbor tries to access the server
+  -i, --insecure               Whether or not the certificate will be verified when Harbor tries to access the server
   -n, --name string            New name for the instance
   -u, --url string             Endpoint URL for the instance
 ```
