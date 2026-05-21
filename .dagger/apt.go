@@ -24,17 +24,12 @@ func (m *HarborCli) AptBuild(ctx context.Context,
 	archs := []string{"amd64", "arm64"}
 	root := dag.Directory()
 	root = root.WithDirectory("pool/main/m", buildDir.Directory("deb"))
-	githubToken, err := token.Plaintext(ctx)
-	if err != nil {
-		return err
-	}
-
 	// Base container
 	container := dag.Container().
 		From("debian:bookworm-slim").
 		WithExec([]string{"apt-get", "update"}).
 		WithExec([]string{"apt-get", "install", "-y", "dpkg-dev", "gzip", "git"}).
-		WithEnvVariable("GH_TOKEN", githubToken).
+		WithSecretVariable("GH_TOKEN", token).
 		WithMountedDirectory("/repo", root).
 		WithWorkdir("/repo")
 
@@ -92,7 +87,7 @@ EOF`,
         `, m.AppVersion),
 		})
 
-	_, err = container.Sync(ctx)
+	_, err := container.Sync(ctx)
 	if err != nil {
 		return fmt.Errorf("failed to run container: %w", err)
 	}
